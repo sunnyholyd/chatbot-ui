@@ -1,3 +1,4 @@
+'use client';
 import { IconClearAll, IconSettings } from '@tabler/icons-react';
 import {
   MutableRefObject,
@@ -23,7 +24,7 @@ import { throttle } from '@/utils/data/throttle';
 import { ChatBody, Conversation, Message } from '@/types/chat';
 import { Plugin } from '@/types/plugin';
 
-import HomeContext from '@/pages/api/home/home.context';
+import HomeContext from '@/app/api/home/home.context';
 
 import Spinner from '../Spinner';
 import { ChatInput } from './ChatInput';
