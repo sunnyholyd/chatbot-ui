@@ -19,7 +19,6 @@ const handler = async (req: NextRequest) => {
     const tokenGenerator = await accessControlLogic.newJWT(email);
     // const tokenGenerator = {token: "test-token", exp: 123};
     // const tokenGenerator = null;
-    console.log("token:" + tokenGenerator);
 
     if (!tokenGenerator)
       return NextResponse.json({
