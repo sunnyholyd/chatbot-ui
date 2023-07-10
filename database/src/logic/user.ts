@@ -32,7 +32,6 @@ export class UserLogic {
    */
   async login(email: string, password: string): Promise<boolean> {
     const checkPassword = await this.dal.readPassword(email);
-    console.log("c:" + typeof(checkPassword));
     
     // const success = password === md5.hash(password.trim());
     const success = checkPassword === password.trim();
