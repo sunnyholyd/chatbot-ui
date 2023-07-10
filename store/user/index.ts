@@ -18,6 +18,7 @@ export interface UserStore {
   updateInviteCode: (inviteCode: string) => void;
 
   sessionToken: string | null;
+  sessionTokenExpiry: number | null;
   validateSessionToken: () => boolean;
   updateSessionToken: (sessionToken: string) => void;
 
@@ -30,6 +31,7 @@ export const useUserStore = create<UserStore>()(
       email: "",
       inviteCode: "",
       sessionToken: null,
+      sessionTokenExpiry: 0,
       subscription: undefined,
 
       updateEmail(email: string) {
@@ -42,19 +44,31 @@ export const useUserStore = create<UserStore>()(
 
       updateSessionToken(sessionToken: string) {
         set((state) => ({ sessionToken }));
+        // Set sessionTokenExpiry to be current time + 3 days
+        set((state) => ({
+          sessionTokenExpiry: Date.now() + 3 * 24 * 60 * 60 * 1000
+        }))
       },
 
       /**
-       * 本地检验 Cookie 是否有效
-       * 后端中间件会二次效验
+       * 本地检验
+       * sessionToken是否存在或者过期
+       * 后端中间件需要二次效验
        */
       validateSessionToken() {
         const sessionToken = get().sessionToken;
-        return !!sessionToken;
+        const sessionTokenExpiry = get().sessionTokenExpiry;
+        if (!sessionToken || !sessionTokenExpiry) {
+          return false;
+        }
+      
+        const now = Date.now();
+        return now < sessionTokenExpiry;
       },
 
       clearData() {
         set((state) => ({
+          sessionTokenExpiry: 0,
           sessionToken: null,
           email: "",
         }));
